@@ -2,10 +2,11 @@ name: Playwright Tests
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+  workflow_dispatch:
+
 jobs:
-  test:
+  login-tests:
+    if: ${{ github.event_name == 'push' }}
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -17,11 +18,33 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
+    - name: Run Login tests
+      run: npx playwright test tests/login.spec.ts
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report
+        name: login-report
         path: playwright-report/
-        retention-days: 30
+        retention-days: 7
+
+  inventory-tests:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run Inventory tests
+      run: npx playwright test tests/inventory.spec.ts
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: inventory-report
+        path: playwright-report/
+        retention-days: 7

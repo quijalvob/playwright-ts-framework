@@ -25,10 +25,10 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    trace: 'on-first-retry',
+    trace: 'on',
     headless: !!process.env.CI,
     launchOptions: {
-      slowMo: process.env.CI ? 0 : 1000,
+      slowMo: process.env.CI ? 0 : 500,
     },
   },
 
