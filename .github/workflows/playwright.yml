@@ -3,10 +3,20 @@ on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
+    inputs:
+      suite:
+        description: 'Which test suite to run'
+        required: true
+        default: 'login'
+        type: choice
+        options:
+          - login
+          - inventory
+          - all
 
 jobs:
   login-tests:
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && (inputs.suite == 'login' || inputs.suite == 'all')) }}
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -25,10 +35,10 @@ jobs:
       with:
         name: login-report
         path: playwright-report/
-        retention-days: 7
+        retention-days: 30
 
   inventory-tests:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'inventory' || inputs.suite == 'all') }}
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -47,4 +57,4 @@ jobs:
       with:
         name: inventory-report
         path: playwright-report/
-        retention-days: 7
+        retention-days: 30
