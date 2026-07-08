@@ -140,8 +140,8 @@ This framework includes a GitHub Actions workflow with selective test suite trig
 This framework was built with AI assistance (Claude by Anthropic) as a pair-programming tool. I want to be transparent about where AI contributed and where human judgment was essential.
 
 **What AI helped with:**
-- Scaffolding initial file structure and boilerplate (BasePage, fixtures pattern, GitHub Actions YAML template)
 - Explaining TypeScript concepts mapped to my existing Java/Selenium background (e.g. `async/await` vs synchronous Selenium, `const`/`let` vs Java's `final`, arrow functions vs lambdas)
+- Scaffolding initial file structure and boilerplate (BasePage, fixtures pattern, GitHub Actions YAML template)
 - Suggesting framework patterns (`.filter()` on locators, `test.describe.configure({ mode: 'serial' })` for dependent API tests, `workflow_dispatch` inputs for selective CI triggering)
 - Drafting initial versions of page objects and test files for me to review and adapt
 
