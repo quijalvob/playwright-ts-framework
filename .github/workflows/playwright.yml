@@ -12,6 +12,9 @@ on:
         options:
           - login
           - inventory
+          - cart
+          - checkout
+          - api
           - all
 
 jobs:
@@ -29,7 +32,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Login tests
-      run: npx playwright test tests/login.spec.ts
+      run: npx playwright test tests/login.spec.ts --retries=1
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
@@ -51,10 +54,76 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Inventory tests
-      run: npx playwright test tests/inventory.spec.ts
+      run: npx playwright test tests/inventory.spec.ts --retries=1
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: inventory-report
+        path: playwright-report/
+        retention-days: 30
+
+  cart-tests:
+    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'cart' || inputs.suite == 'all') }}
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run Cart tests
+      run: npx playwright test tests/cart.spec.ts --retries=1
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: cart-report
+        path: playwright-report/
+        retention-days: 30
+
+  checkout-tests:
+    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'checkout' || inputs.suite == 'all') }}
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run Checkout tests
+      run: npx playwright test tests/checkout-step-one.spec.ts --retries=1
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: checkout-report
+        path: playwright-report/
+        retention-days: 30
+
+  api-tests:
+    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'api' || inputs.suite == 'all') }}
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run API tests
+      run: npx playwright test tests/api/booking.spec.ts --retries=1
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: api-report
         path: playwright-report/
         retention-days: 30

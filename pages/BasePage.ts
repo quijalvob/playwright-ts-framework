@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { TIMEOUTS } from '../data/testData';
+import { TIMEOUTS } from '../data/webData';
 
 export class BasePage {
     readonly page: Page;

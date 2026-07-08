@@ -1,6 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 import { BasePage } from './BasePage';
-import { URLS } from '../data/testData';
+import { URLS } from '../data/webData';
 
 export class LoginPage extends BasePage {
   private readonly usernameInputXPath = '//input[@name="user-name"]';

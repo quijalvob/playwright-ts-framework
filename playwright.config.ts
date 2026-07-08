@@ -18,7 +18,7 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -28,7 +28,7 @@ export default defineConfig({
     trace: 'on',
     headless: !!process.env.CI,
     launchOptions: {
-      slowMo: process.env.CI ? 0 : 500,
+      slowMo: process.env.CI ? 0 : 2500, //to update the speed of the test execution, set slowMo to 0 for faster execution
     },
   },
 

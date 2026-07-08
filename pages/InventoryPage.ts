@@ -5,7 +5,7 @@ export class InventoryPage extends BasePage {
     private readonly inventoryItemXPath = '//div[@class="inventory_item"]';
     private readonly pageTitleXPath = '//span[@class="title"]';
     private readonly cartIconXPath = '//a[@class="shopping_cart_link"]';
-    private readonly addToCartXPath = '//button[@id="add-to-cart"]';
+    private readonly addToCartXPath = '//button[contains(text(),"Add to cart")]';
     private readonly addToCartText = 'Add to cart';
 
     readonly pageTitle: Locator;
