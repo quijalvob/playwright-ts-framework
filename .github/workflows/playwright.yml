@@ -32,7 +32,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Login tests
-      run: npx playwright test tests/login.spec.ts --retries=1
+      run: npx playwright test tests/web/1.login.spec.ts --retries=1
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
@@ -54,7 +54,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Inventory tests
-      run: npx playwright test tests/inventory.spec.ts --retries=1
+      run: npx playwright test tests/web/2.inventory.spec.ts --retries=1
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
@@ -76,7 +76,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Cart tests
-      run: npx playwright test tests/cart.spec.ts --retries=1
+      run: npx playwright test tests/web/3.cart.spec.ts --retries=1
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
@@ -98,7 +98,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Checkout tests
-      run: npx playwright test tests/checkout-step-one.spec.ts --retries=1
+      run: npx playwright test tests/web/4.checkout.spec.ts --retries=1
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
