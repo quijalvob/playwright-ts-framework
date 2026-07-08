@@ -150,7 +150,6 @@ This framework was built with AI assistance (Claude by Anthropic) as a pair-prog
 - **Naming consistency** — AI inconsistently applied casing conventions (e.g. `Xpath` vs `XPath`, `AddToCartText` vs `addToCartText`). I standardised all field names to camelCase throughout
 - **Test data centralisation** — AI initially hardcoded values directly in page objects and spec files. I identified this as a maintenance risk and pushed to extract all strings, URLs, credentials, and expected text into `testData.ts` before it was suggested
 - **File organisation** — I reorganised tests into `tests/web/` and `tests/api/` subfolders and added numeric prefixes for clear execution order, which was my own structural decision
-- **`addItemToCartByName` locator** — the AI-generated button locator (`//button[@id="add-to-cart"]`) was incorrect for SauceDemo's dynamic per-product IDs. I identified this as the root cause of widespread test timeouts and flagged it for correction
 - **API test ordering** — I identified that shared `let` variables across parallel Playwright tests caused `undefined` booking IDs in GET/PUT/DELETE tests, and applied `test.describe.configure({ mode: 'serial' })` as the correct fix
 
 **Overall:** AI accelerated the setup and helped me navigate TypeScript syntax coming from a Java background. However, every locator, every structural decision, and every bug fix required hands-on verification against the actual application. AI output was treated as a starting point, not a final answer.
