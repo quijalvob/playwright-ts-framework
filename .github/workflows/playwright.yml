@@ -1,4 +1,4 @@
-name: Playwright TypeScript Framework - Sample Tests
+name: Playwright TypeScript Framework
 on:
   push:
     branches: [ main, master ]
@@ -15,7 +15,12 @@ on:
           - cart
           - checkout
           - api
-          - all
+          - allgit ad
+          
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   login-tests:
