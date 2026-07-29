@@ -1,0 +1,57 @@
+name: Reusable Test Job
+
+on:
+  workflow_call:
+    inputs:
+      test-path:
+        required: true
+        type: string
+      report-dir:
+        required: true
+        type: string
+      install-browsers:
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  run-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      if: ${{ inputs.install-browsers }}
+      run: npx playwright install --with-deps
+    - name: Run tests
+      run: npx playwright test ${{ inputs.test-path }} --retries=1
+    - name: Install Allure CLI
+      run: npm install -g allure-commandline
+      if: always()
+    - name: Generate Allure Report
+      run: allure generate allure-results --clean -o allure-report
+      if: always()
+    - name: Deploy Allure Report to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: always()
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: allure-report
+        destination_dir: ${{ inputs.report-dir }}
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: ${{ inputs.report-dir }}-allure-results
+        path: allure-results/
+        retention-days: 30

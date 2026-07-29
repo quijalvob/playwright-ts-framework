@@ -22,213 +22,47 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
 jobs:
   login-tests:
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && (inputs.suite == 'login' || inputs.suite == 'all')) }}
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Load Allure history
-      uses: actions/checkout@v4
-      continue-on-error: true
-      with:
-        ref: gh-pages
-        path: gh-pages
-    - name: Run Login tests
-      run: npx playwright test tests/web/1.login.spec.ts --retries=1
-    - name: Install Allure CLI
-      run: npm install -g allure-commandline
-      if: always()
-    - name: Generate Allure Report
-      run: allure generate allure-results --clean -o allure-report
-      if: always()
-    - name: Deploy Allure Report to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      if: always()
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: allure-report
-        destination_dir: login
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: login-allure-results
-        path: allure-results/
-        retention-days: 30
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      test-path: tests/web/1.login.spec.ts
+      report-dir: login
+      install-browsers: true
 
   inventory-tests:
     if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'inventory' || inputs.suite == 'all') }}
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Load Allure history
-      uses: actions/checkout@v4
-      continue-on-error: true
-      with:
-        ref: gh-pages
-        path: gh-pages
-    - name: Run Inventory tests
-      run: npx playwright test tests/web/2.inventory.spec.ts --retries=1
-    - name: Install Allure CLI
-      run: npm install -g allure-commandline
-      if: always()
-    - name: Generate Allure Report
-      run: allure generate allure-results --clean -o allure-report
-      if: always()
-    - name: Deploy Allure Report to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      if: always()
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: allure-report
-        destination_dir: inventory
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: inventory-allure-results
-        path: allure-results/
-        retention-days: 30
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      test-path: tests/web/2.inventory.spec.ts
+      report-dir: inventory
+      install-browsers: true
 
   cart-tests:
     if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'cart' || inputs.suite == 'all') }}
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Load Allure history
-      uses: actions/checkout@v4
-      continue-on-error: true
-      with:
-        ref: gh-pages
-        path: gh-pages
-    - name: Run Cart tests
-      run: npx playwright test tests/web/3.cart.spec.ts --retries=1
-    - name: Install Allure CLI
-      run: npm install -g allure-commandline
-      if: always()
-    - name: Generate Allure Report
-      run: allure generate allure-results --clean -o allure-report
-      if: always()
-    - name: Deploy Allure Report to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      if: always()
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: allure-report
-        destination_dir: cart
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: cart-allure-results
-        path: allure-results/
-        retention-days: 30
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      test-path: tests/web/3.cart.spec.ts
+      report-dir: cart
+      install-browsers: true
 
   checkout-tests:
     if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'checkout' || inputs.suite == 'all') }}
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Load Allure history
-      uses: actions/checkout@v4
-      continue-on-error: true
-      with:
-        ref: gh-pages
-        path: gh-pages
-    - name: Run Checkout tests
-      run: npx playwright test tests/web/4.checkout.spec.ts --retries=1
-    - name: Install Allure CLI
-      run: npm install -g allure-commandline
-      if: always()
-    - name: Generate Allure Report
-      run: allure generate allure-results --clean -o allure-report
-      if: always()
-    - name: Deploy Allure Report to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      if: always()
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: allure-report
-        destination_dir: checkout
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: checkout-allure-results
-        path: allure-results/
-        retention-days: 30
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      test-path: tests/web/4.checkout.spec.ts
+      report-dir: checkout
+      install-browsers: true
 
   api-tests:
     if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'api' || inputs.suite == 'all') }}
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Load Allure history
-      uses: actions/checkout@v4
-      continue-on-error: true
-      with:
-        ref: gh-pages
-        path: gh-pages
-    - name: Run API tests
-      run: npx playwright test tests/api/booking.spec.ts --retries=1
-    - name: Install Allure CLI
-      run: npm install -g allure-commandline
-      if: always()
-    - name: Generate Allure Report
-      run: allure generate allure-results --clean -o allure-report
-      if: always()
-    - name: Deploy Allure Report to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      if: always()
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: allure-report
-        destination_dir: api
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: api-allure-results
-        path: allure-results/
-        retention-days: 30
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      test-path: tests/api/booking.spec.ts
+      report-dir: api
+      install-browsers: false
