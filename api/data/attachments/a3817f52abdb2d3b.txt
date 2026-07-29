@@ -1,0 +1,3 @@
+=== NEGATIVE DELETE INVALID TOKEN ===
+Status: 403
+Body: Forbidden

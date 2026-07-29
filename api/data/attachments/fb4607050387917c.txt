@@ -1,0 +1,5 @@
+=== NEGATIVE AUTH INVALID CREDENTIALS ===
+Status: 200
+Body: {
+  "reason": "Bad credentials"
+}
