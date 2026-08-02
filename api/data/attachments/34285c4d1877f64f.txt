@@ -1,5 +1,0 @@
-=== DELETE BOOKING ===
-Using bookingId: 6041
-Using authToken: 9833ba06f2073e6
-Status: 201
-Body: Created
