@@ -22,10 +22,6 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: gh-pages-deploy
-  cancel-in-progress: false
-
 jobs:
   login-tests:
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && (inputs.suite == 'login' || inputs.suite == 'all')) }}
@@ -36,7 +32,8 @@ jobs:
       install-browsers: true
 
   inventory-tests:
-    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'inventory' || inputs.suite == 'all') }}
+    needs: login-tests
+    if: ${{ always() && github.event_name == 'workflow_dispatch' && (inputs.suite == 'inventory' || inputs.suite == 'all') }}
     uses: ./.github/workflows/reusable-test.yml
     with:
       test-path: tests/web/2.inventory.spec.ts
@@ -44,7 +41,8 @@ jobs:
       install-browsers: true
 
   cart-tests:
-    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'cart' || inputs.suite == 'all') }}
+    needs: inventory-tests
+    if: ${{ always() && github.event_name == 'workflow_dispatch' && (inputs.suite == 'cart' || inputs.suite == 'all') }}
     uses: ./.github/workflows/reusable-test.yml
     with:
       test-path: tests/web/3.cart.spec.ts
@@ -52,7 +50,8 @@ jobs:
       install-browsers: true
 
   checkout-tests:
-    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'checkout' || inputs.suite == 'all') }}
+    needs: cart-tests
+    if: ${{ always() && github.event_name == 'workflow_dispatch' && (inputs.suite == 'checkout' || inputs.suite == 'all') }}
     uses: ./.github/workflows/reusable-test.yml
     with:
       test-path: tests/web/4.checkout.spec.ts
@@ -60,7 +59,8 @@ jobs:
       install-browsers: true
 
   api-tests:
-    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.suite == 'api' || inputs.suite == 'all') }}
+    needs: checkout-tests
+    if: ${{ always() && github.event_name == 'workflow_dispatch' && (inputs.suite == 'api' || inputs.suite == 'all') }}
     uses: ./.github/workflows/reusable-test.yml
     with:
       test-path: tests/api/booking.spec.ts
