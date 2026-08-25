@@ -1,0 +1,15 @@
+=== GET BOOKING BY ID ===
+Using bookingId: 4993
+Using authToken: f7283ea2b2b30a2
+Status: 200
+Body: {
+  "firstname": "Bobby",
+  "lastname": "Quijalvo",
+  "totalprice": 111,
+  "depositpaid": true,
+  "bookingdates": {
+    "checkin": "2024-01-01",
+    "checkout": "2024-01-07"
+  },
+  "additionalneeds": "Breakfast"
+}

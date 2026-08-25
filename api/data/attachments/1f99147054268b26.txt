@@ -1,0 +1,17 @@
+=== POST CREATE BOOKING ===
+Status: 200
+Body: {
+  "bookingid": 5030,
+  "booking": {
+    "firstname": "Bobby",
+    "lastname": "Quijalvo",
+    "totalprice": 111,
+    "depositpaid": true,
+    "bookingdates": {
+      "checkin": "2024-01-01",
+      "checkout": "2024-01-07"
+    },
+    "additionalneeds": "Breakfast"
+  }
+}
+BookingId captured: 5030

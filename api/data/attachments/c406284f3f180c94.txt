@@ -1,0 +1,15 @@
+=== PUT UPDATE BOOKING ===
+Using bookingId: 5016
+Using authToken: 2967734450eb6d6
+Status: 200
+Body: {
+  "firstname": "Updated",
+  "lastname": "Name",
+  "totalprice": 999,
+  "depositpaid": false,
+  "bookingdates": {
+    "checkin": "2025-01-01",
+    "checkout": "2025-01-10"
+  },
+  "additionalneeds": "Dinner"
+}
